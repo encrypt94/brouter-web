@@ -60,6 +60,7 @@ BR.Layers = L.Class.extend({
         L.DomUtil.get('custom_layers_add_base').onclick = L.bind(this._addBaseLayer, this);
         L.DomUtil.get('custom_layers_add_overlay').onclick = L.bind(this._addOverlay, this);
         L.DomUtil.get('custom_layers_add_overpass').onclick = L.bind(this._addOverpassQuery, this);
+        L.DomUtil.get('custom_layers_add_geojson').onclick = L.bind(this._addGeoJSONLayer, this);
         L.DomUtil.get('custom_layers_remove').onclick = L.bind(this._remove, this);
 
         this._loadLayers();
@@ -104,11 +105,14 @@ BR.Layers = L.Class.extend({
     _addOverlay: function (evt) {
         this._addFromInput(true);
     },
+    _addGeoJSONLayer: function (evt) {
+        this._addFromInput(true, 'GeoJSON');
+    },
     _addOverpassQuery: function (evt) {
         this._addFromInput(true, 'OverpassAPI');
     },
 
-    _addLayer: function (layerName, layerUrl, isOverlay, dataSource) {
+    _addLayer: async function (layerName, layerUrl, isOverlay, dataSource) {
         if (layerName in this._layers) return;
 
         if (layerName in this._customLayers) return;
@@ -120,6 +124,8 @@ BR.Layers = L.Class.extend({
                 layer = this._layersControl.layersConfig.createOverpassLayer(layerUrl);
             } else if (dataSource === 'OpenStreetMapNotesAPI') {
                 layer = this._layersControl.layersConfig.createOpenStreetMapNotesLayer();
+            } else if (dataSource === 'GeoJSON') {
+                layer = await this._layersControl.layersConfig.createGeoJSONLayer(layerUrl);
             } else {
                 layer = L.tileLayer(layerUrl);
             }

@@ -73,6 +73,7 @@
     "add-base": "Add base layer",
     "add-overlay": "Add overlay",
     "add-overpass": "Add overpass query",
+    "add-geojson": "Add geojson layer",
     "custom-layer-name-helptext": "ex: OpenStreetMap",
     "custom-layer-name-label": "Custom layer name",
     "custom-layer-url-helptext-normal": "URL for normal layers, ex: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",

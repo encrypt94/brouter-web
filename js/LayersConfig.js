@@ -189,6 +189,25 @@ BR.LayersConfig = L.Class.extend({
         }
     },
 
+    createGeoJSONLayer: async function (url) {
+        var geojsonFeature = await fetch(url);
+        geojsonFeature = await geojsonFeature.json();
+        var l = L.geoJSON([geojsonFeature], {
+            onEachFeature: (feature, layer) => {
+                var popupContent = '';
+                if (feature.properties?.name) {
+                    popupContent += '<b>' + feature.properties.name + '</b>';
+                    if (feature.properties.data?.Description) {
+                        popupContent += '<br/>' + feature.properties.data.Description;
+                    }
+                    layer.bindPopup(popupContent);
+                }
+            },
+        });
+        l._url = url;
+        return l;
+    },
+
     getOverpassIconUrl: function (icon) {
         const iconPrefix = /^(maki|temaki|fas)-/;
         let iconUrl = null;
